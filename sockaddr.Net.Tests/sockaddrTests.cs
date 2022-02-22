@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Runtime.CompilerServices;
 using NUnit.Framework;
 using StirlingLabs.Utilities;
 using StirlingLabs;
+using StirlingLabs.Utilities.Assertions;
 
 namespace StirlingLabs.Sockaddr.Tests;
 
@@ -26,6 +28,8 @@ public class Tests
     public static IEnumerable IPv6TestCases
     {
         get {
+            yield return new object[] { "1011:2021:3031:4041:5051:6061:7071:8081", (ushort)1000, (ushort)0 };
+            yield return new object[] { "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff", (ushort)1000, (ushort)0 };
             yield return new object[] { "::1", (ushort)1000, (ushort)0 };
             yield return new object[] { "::1.2.3.4", (ushort)1234, (ushort)1 };
             yield return new object[] { "::4.3.2.1", (ushort)4321, (ushort)1 };
@@ -118,8 +122,12 @@ public class Tests
     }
 
     [TestCaseSource(nameof(IPv4TestCases))]
-    public unsafe void StringMemberIPv4Tests(string address, ushort port)
+    public unsafe void IPv4Tests(string address, ushort port)
     {
+        var ip = IPAddress.Parse(address);
+
+        var addressBytes = ip.GetAddressBytes();
+
         var pSa = sockaddr.CreateIPv4(address, port);
 
         Assert.True(pSa->IsIPv4());
@@ -128,6 +136,9 @@ public class Tests
         Assert.False(pSa->IsIPv6);
 
         Assert.AreEqual(address, pSa->GetAddressString().ToString());
+
+        BigSpanAssert.AreEqual((ReadOnlyBigSpan<byte>)addressBytes, pSa->GetAddressByteSpan());
+        BigSpanAssert.AreEqual((ReadOnlyBigSpan<byte>)addressBytes, pSa->AddressBytes);
 
         Assert.AreEqual(port, pSa->GetPort());
 
@@ -139,8 +150,11 @@ public class Tests
         Assert.False(sa.IsIPv6());
         Assert.True(sa.IsIPv4);
         Assert.False(sa.IsIPv6);
-
+        
         Assert.AreEqual(address, sa.GetAddressString().ToString());
+
+        BigSpanAssert.AreEqual((ReadOnlyBigSpan<byte>)addressBytes, sa.GetAddressByteSpan());
+        BigSpanAssert.AreEqual((ReadOnlyBigSpan<byte>)addressBytes, sa.AddressBytes);
 
         Assert.AreEqual(port, sa.GetPort());
 
@@ -148,8 +162,12 @@ public class Tests
     }
 
     [TestCaseSource(nameof(IPv6TestCases))]
-    public unsafe void StringMemberIPv6Tests(string address, ushort port, ushort scope)
+    public unsafe void BinaryIPv6Tests(string address, ushort port, ushort scope)
     {
+        var ip = IPAddress.Parse(address);
+
+        var addressBytes = ip.GetAddressBytes();
+
         var pSa = sockaddr.CreateIPv6(address, port, scope);
 
         Assert.True(pSa->IsIPv6());
@@ -158,6 +176,9 @@ public class Tests
         Assert.False(pSa->IsIPv4);
 
         Assert.AreEqual(address, pSa->GetAddressString().ToString());
+
+        BigSpanAssert.AreEqual((ReadOnlyBigSpan<byte>)addressBytes, pSa->GetAddressByteSpan());
+        BigSpanAssert.AreEqual((ReadOnlyBigSpan<byte>)addressBytes, pSa->AddressBytes);
 
         Assert.AreEqual(port, pSa->GetPort());
 

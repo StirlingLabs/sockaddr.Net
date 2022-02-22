@@ -10,6 +10,7 @@ namespace StirlingLabs;
 
 using static SockaddrExtensions;
 
+[DebuggerDisplay("")]
 [SuppressMessage("Design", "CA1066", Justification = "Opaque")]
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "InvokeAsExtensionMethod")]
@@ -112,6 +113,18 @@ public readonly unsafe struct sockaddr
     [SuppressGCTransition]
 #endif
     [DllImport(LibName, ExactSpelling = true)]
+    internal static extern byte* sa_address_bytes(sockaddr* sa, nuint* size);
+
+    internal static byte* sa_address_bytes(sockaddr* sa, out nuint size)
+    {
+        fixed (nuint* pSize = &size)
+            return sa_address_bytes(sa, pSize);
+    }
+
+#if NET5_0_OR_GREATER
+    [SuppressGCTransition]
+#endif
+    [DllImport(LibName, ExactSpelling = true)]
     internal static extern void sa_free(void* p);
 
     public static sockaddr* CreateIPv4(Utf8String address, ushort port)
@@ -198,10 +211,10 @@ public readonly unsafe struct sockaddr
         get => SockaddrExtensions.IsIPv6(ref Unsafe.AsRef(this));
     }
 
-    public SockaddrAddressBytes* AddressBytes
+    public Span<byte> AddressBytes
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => SockaddrExtensions.GetAddressBytes(ref Unsafe.AsRef(this));
+        get => SockaddrExtensions.GetAddressByteSpan(ref Unsafe.AsRef(this));
     }
 
     public ushort Port

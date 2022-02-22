@@ -76,6 +76,10 @@ public static unsafe class SockaddrExtensions
         => (SockaddrAddressBytes*)self.AsPointer();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Span<byte> GetAddressByteSpan(ref this sockaddr self)
+        => new(sa_address_bytes(self.AsPointer(), out var size), (int)size);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SetScopeByName(ref this sockaddr self, Utf8String value)
     {
         if (!sa_set_scope(self.AsPointer(), value.Pointer))
