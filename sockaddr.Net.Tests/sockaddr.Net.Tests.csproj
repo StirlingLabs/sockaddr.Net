@@ -23,11 +23,11 @@
     </ItemGroup>
     
     <ItemGroup Condition="'$(OS)'=='Windows_NT'">
-        <Content Include="..\..\cmake-build-$(Configuration.ToLowerInvariant())\sa.dll">
+        <Content Include="..\..\libsa\cmake-build-$(Configuration.ToLowerInvariant())\sa.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Link>sa.dll</Link>
         </Content>
-        <Content Include="..\..\cmake-build-$(Configuration.ToLowerInvariant())\sa.pdb">
+        <Content Include="..\..\libsa\cmake-build-$(Configuration.ToLowerInvariant())\sa.pdb">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Link>sa.pdb</Link>
         </Content>
