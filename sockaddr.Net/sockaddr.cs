@@ -1,7 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 #if !NO_INTERNAL_DEPS
 using StirlingLabs.Utilities;
 #endif
@@ -10,6 +12,7 @@ namespace StirlingLabs;
 
 using static SockaddrExtensions;
 
+[PublicAPI]
 [DebuggerDisplay("")]
 [SuppressMessage("Design", "CA1066", Justification = "Opaque")]
 [SuppressMessage("ReSharper", "InconsistentNaming")]

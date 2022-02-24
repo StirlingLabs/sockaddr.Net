@@ -1,10 +1,14 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 
 namespace StirlingLabs;
 
-public readonly unsafe struct SockaddrAddressBytes : IEnumerable<byte>
+[PublicAPI]
+public readonly unsafe struct SockaddrAddressBytes : IEnumerable<byte>, IComparable<SockaddrAddressBytes>
 {
     /// <summary>
     /// Accesses or mutates an IP address bytes in network byte order. 
@@ -39,9 +43,7 @@ public readonly unsafe struct SockaddrAddressBytes : IEnumerable<byte>
     {
         get {
             var p = (sockaddr*)Unsafe.AsPointer(ref Unsafe.AsRef(this));
-            return p->IsIPv6() ? 16
-                : p->IsIPv4() ? 4
-                : 0;
+            return p->IsIPv6 ? 16 : p->IsIPv4 ? 4 : 0;
         }
     }
 
@@ -50,4 +52,59 @@ public readonly unsafe struct SockaddrAddressBytes : IEnumerable<byte>
 
     IEnumerator IEnumerable.GetEnumerator()
         => GetEnumerator();
+
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public override bool Equals(object? obj)
+        => false;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool operator ==(in SockaddrAddressBytes left, in SockaddrAddressBytes right)
+        => Unsafe.AreSame(ref Unsafe.AsRef(left), ref Unsafe.AsRef(right))
+            || left.CompareTo(right) == 0;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool operator !=(in SockaddrAddressBytes left, in SockaddrAddressBytes right)
+        => !(left == right);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool Equals(in SockaddrAddressBytes other)
+        => this == other;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool operator ==(in SockaddrAddressBytes left, SockaddrAddressBytes* right)
+        => Unsafe.AreSame(ref Unsafe.AsRef(left), ref Unsafe.AsRef<SockaddrAddressBytes>(right));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool operator !=(in SockaddrAddressBytes left, SockaddrAddressBytes* right)
+        => !(left == right);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool Equals(SockaddrAddressBytes* other)
+        => this == other;
+
+    public static implicit operator Span<byte>(in SockaddrAddressBytes sa)
+        => ((sockaddr*)Unsafe.AsPointer(ref Unsafe.AsRef(sa)))->AddressBytes;
+
+    public static implicit operator ReadOnlySpan<byte>(in SockaddrAddressBytes sa)
+        => (Span<byte>)sa;
+
+    public int CompareTo(SockaddrAddressBytes other)
+        => ((Span<byte>)this).SequenceCompareTo(other);
+
+    public static bool operator <(SockaddrAddressBytes left, SockaddrAddressBytes right)
+        => left.CompareTo(right) < 0;
+
+    public static bool operator >(SockaddrAddressBytes left, SockaddrAddressBytes right)
+        => left.CompareTo(right) > 0;
+
+    public static bool operator <=(SockaddrAddressBytes left, SockaddrAddressBytes right)
+        => left.CompareTo(right) <= 0;
+
+    public static bool operator >=(SockaddrAddressBytes left, SockaddrAddressBytes right)
+        => left.CompareTo(right) >= 0;
+
+    public Span<byte> ToSpan() => this;
+
+    public ReadOnlySpan<byte> ToReadOnlySpan() => this;
 }

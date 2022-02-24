@@ -1,20 +1,15 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Runtime.CompilerServices;
 using NUnit.Framework;
 using StirlingLabs.Utilities;
-using StirlingLabs;
 using StirlingLabs.Utilities.Assertions;
 
 namespace StirlingLabs.Sockaddr.Tests;
 
 public class Tests
 {
-    //private static Utf8String _ipv4LocalhostStr = Utf8String.Create("127.0.0.1");
-    //private static Utf8String _ipv6LocalhostStr = Utf8String.Create("::1");
 
     public static IEnumerable IPv4TestCases
     {
@@ -22,6 +17,7 @@ public class Tests
             yield return new object[] { "127.0.0.1", (ushort)1000 };
             yield return new object[] { "1.2.3.4", (ushort)1234 };
             yield return new object[] { "4.3.2.1", (ushort)4321 };
+            yield return new object[] { "123.88.62.201", (ushort)32890 };
         }
     }
 
@@ -162,7 +158,7 @@ public class Tests
     }
 
     [TestCaseSource(nameof(IPv6TestCases))]
-    public unsafe void BinaryIPv6Tests(string address, ushort port, ushort scope)
+    public unsafe void IPv6Tests(string address, ushort port, ushort scope)
     {
         var ip = IPAddress.Parse(address);
 

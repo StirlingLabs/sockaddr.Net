@@ -1,11 +1,13 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using StirlingLabs.Native;
+using JetBrains.Annotations;
 using StirlingLabs.Utilities;
 using static StirlingLabs.sockaddr;
 
 namespace StirlingLabs;
 
+[PublicAPI]
 [SuppressMessage("Design", "CA1045", Justification = "Hacks")]
 public static unsafe class SockaddrExtensions
 {

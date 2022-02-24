@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.Build.NoTargets/3.3.0">
+
+    <PropertyGroup>
+        <PackageId>runtime.osx-x64.libsa</PackageId>
+        <AssemblyName>runtime.osx-x64.libsa</AssemblyName>
+        <TargetFrameworks>net5.0;net6.0;netstandard2.0;netstandard2.1</TargetFrameworks>
+        <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Microsoft.Quic</RootNamespace>
+        <LangVersion>10</LangVersion>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+        <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+        <EnableDefaultItems>false</EnableDefaultItems>
+        <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="libsa.dylib">
+            <Pack>True</Pack>
+            <PackageCopyToOutput>True</PackageCopyToOutput>
+            <PackagePath>runtimes/osx-x64/native/libsa.dylib</PackagePath>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Link>%(Identity)</Link>
+        </Content>
+    </ItemGroup>
+
+    <ImportGroup>
+        <Import Project="../Version.proj"/>
+    </ImportGroup>
+
+
+</Project>
