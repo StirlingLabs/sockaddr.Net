@@ -28,6 +28,17 @@ jobs:
                 run: dotnet build sockaddr.Net.sln -c Release
             -   name: Test
                 run: dotnet test sockaddr.Net.sln --no-build -c Release --logger GitHubActions
+            -   name: Save coverage to storage branch
+                uses: StirlingLabs/BranchStorageAction@v21.07.3
+                with:
+                    comment: |
+                        Coverage for ${{github.ref}}
+                        Action: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}
+                        Commit: https://github.com/${{github.repository}}/commit/${{github.sha}}
+                    storage-branch: coverage
+                    src: coverage
+                    dst: coverage
+                    prune: true
             -   name: Pack
                 run: dotnet pack sockaddr.Net.sln --no-restore --no-build -c Release --output artifacts
             -   name: Artifacts
