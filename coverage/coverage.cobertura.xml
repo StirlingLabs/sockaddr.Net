@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<coverage line-rate="0.4276" branch-rate="0.3333" version="1.9" timestamp="1645745759" lines-covered="65" lines-valid="152" branches-covered="16" branches-valid="48">
+<coverage line-rate="0.4276" branch-rate="0.3333" version="1.9" timestamp="1645746063" lines-covered="65" lines-valid="152" branches-covered="16" branches-valid="48">
   <sources />
   <packages>
     <package name="sockaddr.Net" line-rate="0.4276" branch-rate="0.3333" complexity="111">
