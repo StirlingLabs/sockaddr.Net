@@ -28,6 +28,10 @@ public static unsafe class SockaddrExtensions
     public static ref sockaddr AsRef(ref this sockaddr r) => ref r;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsUnspec(ref this sockaddr self)
+        => sa_is_unspec(self.AsPointer());
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsIPv4(ref this sockaddr self)
         => sa_is_ipv4(self.AsPointer());
 

@@ -128,8 +128,10 @@ public class Tests
 
         Assert.True(pSa->IsIPv4());
         Assert.False(pSa->IsIPv6());
+        Assert.False(pSa->IsUnspec());
         Assert.True(pSa->IsIPv4);
         Assert.False(pSa->IsIPv6);
+        Assert.False(pSa->IsUnspec);
 
         Assert.AreEqual(address, pSa->GetAddressString().ToString());
 
@@ -144,8 +146,10 @@ public class Tests
 
         Assert.True(sa.IsIPv4());
         Assert.False(sa.IsIPv6());
+        Assert.False(sa.IsUnspec());
         Assert.True(sa.IsIPv4);
         Assert.False(sa.IsIPv6);
+        Assert.False(sa.IsUnspec);
         
         Assert.AreEqual(address, sa.GetAddressString().ToString());
 
@@ -168,8 +172,10 @@ public class Tests
 
         Assert.True(pSa->IsIPv6());
         Assert.False(pSa->IsIPv4());
+        Assert.False(pSa->IsUnspec());
         Assert.True(pSa->IsIPv6);
         Assert.False(pSa->IsIPv4);
+        Assert.False(pSa->IsUnspec);
 
         Assert.AreEqual(address, pSa->GetAddressString().ToString());
 
@@ -195,8 +201,10 @@ public class Tests
 
         Assert.True(sa.IsIPv6());
         Assert.False(sa.IsIPv4());
+        Assert.False(sa.IsUnspec());
         Assert.True(sa.IsIPv6);
         Assert.False(sa.IsIPv4);
+        Assert.False(sa.IsUnspec);
 
         Assert.AreEqual(address, sa.GetAddressString().ToString());
 

@@ -25,6 +25,12 @@ public readonly unsafe struct sockaddr
     //[SuppressGCTransition]
 #endif
     [DllImport(LibName, ExactSpelling = true)]
+    internal static extern bool sa_is_unspec(sockaddr* sa);
+
+#if NET5_0_OR_GREATER
+    //[SuppressGCTransition]
+#endif
+    [DllImport(LibName, ExactSpelling = true)]
     internal static extern bool sa_is_ipv4(sockaddr* sa);
 
 #if NET5_0_OR_GREATER
@@ -130,6 +136,28 @@ public readonly unsafe struct sockaddr
     [DllImport(LibName, ExactSpelling = true)]
     internal static extern void sa_free(void* p);
 
+#if NET5_0_OR_GREATER
+    [SuppressGCTransition]
+#endif
+    [DllImport(LibName, ExactSpelling = true)]
+    internal static extern int sa_get_family_unspec();
+
+#if NET5_0_OR_GREATER
+    [SuppressGCTransition]
+#endif
+    [DllImport(LibName, ExactSpelling = true)]
+    internal static extern int sa_get_family_ipv4();
+
+#if NET5_0_OR_GREATER
+    [SuppressGCTransition]
+#endif
+    [DllImport(LibName, ExactSpelling = true)]
+    internal static extern int sa_get_family_ipv6();
+
+    public static readonly int AF_UNSPEC = sa_get_family_unspec();
+    public static readonly int AF_INET = sa_get_family_ipv4();
+    public static readonly int AF_INET6 = sa_get_family_ipv6();
+
     public static sockaddr* CreateIPv4(Utf8String address, ushort port)
     {
         var result = sa_ipv4(address.Pointer, port);
@@ -201,6 +229,12 @@ public readonly unsafe struct sockaddr
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override int GetHashCode()
         => SockaddrExtensions.GetHashCode(ref Unsafe.AsRef(this));
+
+    public bool IsUnspec
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => SockaddrExtensions.IsUnspec(ref Unsafe.AsRef(this));
+    }
 
     public bool IsIPv4
     {
