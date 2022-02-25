@@ -138,6 +138,9 @@ public static unsafe class SockaddrExtensions
         var addressStr = address.ToString();
         if (addressStr == null) return null;
 
+        if (pSa->IsUnspec())
+            return $"*:{pSa->GetPort()}";
+
         if (pSa->IsIPv6())
         {
             var scope = pSa->GetScopeName();

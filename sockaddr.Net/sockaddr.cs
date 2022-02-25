@@ -49,6 +49,12 @@ public readonly unsafe struct sockaddr
     [SuppressGCTransition]
 #endif
     [DllImport(LibName, ExactSpelling = true)]
+    internal static extern sockaddr* sa_unspec(ushort port);
+
+#if NET5_0_OR_GREATER
+    [SuppressGCTransition]
+#endif
+    [DllImport(LibName, ExactSpelling = true)]
     internal static extern sockaddr* sa_ipv4(sbyte* str, ushort port);
 
 #if NET5_0_OR_GREATER
@@ -158,6 +164,13 @@ public readonly unsafe struct sockaddr
     public static readonly int AF_INET = sa_get_family_ipv4();
     public static readonly int AF_INET6 = sa_get_family_ipv6();
 
+    public static sockaddr* CreateUnspec(ushort port)
+    {
+        var result = sa_unspec(port);
+        if (result == null) throw new ArgumentException("Invalid arguments.");
+        return result;
+    }
+    
     public static sockaddr* CreateIPv4(Utf8String address, ushort port)
     {
         var result = sa_ipv4(address.Pointer, port);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
@@ -10,6 +11,15 @@ namespace StirlingLabs.Sockaddr.Tests;
 
 public class Tests
 {
+    public static IEnumerable UnspecTestCases
+    {
+        get {
+            yield return new object[] { (ushort)1000 };
+            yield return new object[] { (ushort)1234 };
+            yield return new object[] { (ushort)4321 };
+            yield return new object[] { (ushort)32890 };
+        }
+    }
 
     public static IEnumerable IPv4TestCases
     {
@@ -34,6 +44,46 @@ public class Tests
             yield return new object[] { "::ffff:192.0.2.128", (ushort)2, (ushort)2 };
             yield return new object[] { "64:ff9b::c000:280", (ushort)3, (ushort)1 };
         }
+    }
+
+    [TestCaseSource(nameof(UnspecTestCases))]
+    [SuppressMessage("Warning", "CS1718", Justification = "Yes")]
+    public unsafe void ReferenceEqualityUnspecTests(ushort port)
+    {
+        var pSa1 = sockaddr.CreateUnspec(port);
+        var pSa2 = sockaddr.CreateUnspec(port);
+        ref var sa1 = ref pSa1->AsRef();
+        ref var sa2 = ref pSa2->AsRef();
+
+        Assert.False(sa1.Equals(sa2));
+        Assert.True(sa1.Equals(sa1));
+        Assert.True(sa2.Equals(sa2));
+        Assert.False(sa1.Equals(null));
+        Assert.False(sa2.Equals(null));
+
+        Assert.False(sa1 == sa2);
+        // ReSharper disable once EqualExpressionComparison
+        Assert.True(sa1 == sa1);
+        // ReSharper disable once EqualExpressionComparison
+        Assert.True(sa2 == sa2);
+
+        Assert.False(sa1 == null);
+        Assert.False(sa2 == null);
+
+        Assert.True(sa1 != sa2);
+        // ReSharper disable once EqualExpressionComparison
+        Assert.False(sa1 != sa1);
+        // ReSharper disable once EqualExpressionComparison
+        Assert.False(sa2 != sa2);
+
+        Assert.True(sa1 != null);
+        Assert.True(sa2 != null);
+
+        Assert.AreEqual((nuint)Unsafe.AsPointer(ref sa1), (nuint)pSa1);
+        Assert.AreEqual((nuint)Unsafe.AsPointer(ref sa2), (nuint)pSa2);
+
+        Assert.True(sa1.Equals(pSa1));
+        Assert.True(sa2.Equals(pSa2));
     }
 
     [TestCaseSource(nameof(IPv4TestCases))]
@@ -76,7 +126,6 @@ public class Tests
         Assert.True(sa2.Equals(pSa2));
     }
 
-
     [TestCaseSource(nameof(IPv6TestCases))]
     [SuppressMessage("Warning", "CS1718", Justification = "Yes")]
     public unsafe void ReferenceEqualityIPv6Tests(string address, ushort port, ushort scope)
@@ -117,6 +166,46 @@ public class Tests
         Assert.True(sa2.Equals(pSa2));
     }
 
+    [TestCaseSource(nameof(UnspecTestCases))]
+    public unsafe void UnspecTests(ushort port)
+    {
+        var pSa = sockaddr.CreateUnspec(port);
+
+        Assert.False(pSa->IsIPv4());
+        Assert.False(pSa->IsIPv6());
+        Assert.True(pSa->IsUnspec());
+        Assert.False(pSa->IsIPv4);
+        Assert.False(pSa->IsIPv6);
+        Assert.True(pSa->IsUnspec);
+
+        Assert.AreEqual("*", pSa->GetAddressString().ToString());
+
+        Assert.True(pSa->GetAddressByteSpan().IsEmpty);
+        Assert.True(pSa->AddressBytes.IsEmpty);
+
+        Assert.AreEqual(port, pSa->GetPort());
+
+        Assert.AreEqual($"*:{port}", pSa->ToString());
+
+        ref var sa = ref pSa->AsRef();
+
+        Assert.False(sa.IsIPv4());
+        Assert.False(sa.IsIPv6());
+        Assert.True(sa.IsUnspec());
+        Assert.False(sa.IsIPv4);
+        Assert.False(sa.IsIPv6);
+        Assert.True(sa.IsUnspec);
+
+        Assert.AreEqual("*", sa.GetAddressString().ToString());
+
+        Assert.True(sa.GetAddressByteSpan().IsEmpty);
+        Assert.True(sa.AddressBytes.IsEmpty);
+
+        Assert.AreEqual(port, sa.GetPort());
+
+        Assert.AreEqual($"*:{port}", sa.ToString());
+    }
+
     [TestCaseSource(nameof(IPv4TestCases))]
     public unsafe void IPv4Tests(string address, ushort port)
     {
@@ -150,7 +239,7 @@ public class Tests
         Assert.True(sa.IsIPv4);
         Assert.False(sa.IsIPv6);
         Assert.False(sa.IsUnspec);
-        
+
         Assert.AreEqual(address, sa.GetAddressString().ToString());
 
         BigSpanAssert.AreEqual((ReadOnlyBigSpan<byte>)addressBytes, sa.GetAddressByteSpan());
