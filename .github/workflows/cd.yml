@@ -19,7 +19,17 @@ jobs:
                     submodules: true
             -   name: Fetch tag git metadata
                 run: git fetch --force --update-shallow --depth 1 origin +refs/tags/*:refs/tags/* || echo no tags
-            -   uses: actions/setup-dotnet@v1.8.1
+            -   name: Check for .NET 6 preinstalled
+                id: dotnet_check
+                run: |
+                    compgen -G "~/.dotnet/sdk/6.0.*" \
+                    && echo "::set-output name=has_6_0::true" || \
+                    compgen -G "/usr/local/dotnet/sdk/6.0.*" \
+                    && echo "::set-output name=has_6_0::true" || \
+                    compgen -G "/usr/share/dotnet/sdk/6.0.*" \
+                    && echo "::set-output name=has_6_0::true" || true
+            -   uses: actions/setup-dotnet@v1.9.1
+                if: ${{ steps.dotnet_check.outputs.has_6_0 != 'true' }}
                 with:
                     dotnet-version: 6.0.x
             -   name: NuGet Auth
@@ -39,8 +49,6 @@ jobs:
                     src: coverage
                     dst: coverage
                     prune: true
-            -   name: Pack
-                run: dotnet pack sockaddr.Net.sln --no-restore --no-build -c Release --output artifacts
             -   name: Artifacts
                 uses: actions/upload-artifact@v2
                 with:
@@ -59,7 +67,17 @@ jobs:
                     submodules: true
             -   name: Fetch tag git metadata
                 run: git fetch --force --update-shallow --depth 1 origin +refs/tags/*:refs/tags/* || echo no tags
-            -   uses: actions/setup-dotnet@v1.8.1
+            -   name: Check for .NET 6 preinstalled
+                id: dotnet_check
+                run: |
+                    compgen -G "~/.dotnet/sdk/6.0.*" \
+                    && echo "::set-output name=has_6_0::true" || \
+                    compgen -G "/usr/local/dotnet/sdk/6.0.*" \
+                    && echo "::set-output name=has_6_0::true" || \
+                    compgen -G "/usr/share/dotnet/sdk/6.0.*" \
+                    && echo "::set-output name=has_6_0::true" || true
+            -   uses: actions/setup-dotnet@v1.9.1
+                if: ${{ steps.dotnet_check.outputs.has_6_0 != 'true' }}
                 with:
                     dotnet-version: 6.0.x
             -   name: NuGet Auth

@@ -1,9 +1,7 @@
 name: Integration
 
 on:
-    push:
-        branches:
-            - main
+    pull_request:
     workflow_dispatch:
 
 defaults:
@@ -78,6 +76,11 @@ jobs:
                     path: |
                         artifacts/*.nupkg
                     if-no-files-found: error
+            -   name: Report Coverage to PR
+                uses: StirlingLabs/PROutputAction@v1.0.1
+                with:
+                    sources: '.github/coverage/prefix,coverage/,.github/coverage/suffix'
+                    token: ${{github.token}}
 
     macos:
         name: Mac

@@ -18,6 +18,11 @@
         <IncludeBuildOutput>false</IncludeBuildOutput>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(CI)'!=''">
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageOutputPath>../artifacts</PackageOutputPath>
+    </PropertyGroup>
+
     <ItemGroup>
         <Content Include="libsa.so">
             <Pack>True</Pack>
