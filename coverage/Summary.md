@@ -1,25 +1,25 @@
 ﻿# Summary
 |||
 |:---|:---|
-| Generated on: | 02/25/2022 - 18:58:35 |
+| Generated on: | 02/25/2022 - 19:31:51 |
 | Parser: | CoberturaParser |
 | Assemblies: | 1 |
 | Classes: | 5 |
 | Files: | 5 |
-| Covered lines: | 67 |
+| Covered lines: | 72 |
 | Uncovered lines: | 90 |
-| Coverable lines: | 157 |
-| Total lines: | 619 |
-| Line coverage: | 42.6% (67 of 157) |
-| Covered branches: | 16 |
-| Total branches: | 48 |
-| Branch coverage: | 33.3% (16 of 48) |
+| Coverable lines: | 162 |
+| Total lines: | 635 |
+| Line coverage: | 44.4% (72 of 162) |
+| Covered branches: | 19 |
+| Total branches: | 52 |
+| Branch coverage: | 36.5% (19 of 52) |
 
 |**Name**|**Covered**|**Uncovered**|**Coverable**|**Total**|**Line coverage**|**Covered**|**Total**|**Branch coverage**|
 |:---|---:|---:|---:|---:|---:|---:|---:|---:|
-|**sockaddr.Net**|**67**|**90**|**157**|**619**|**42.6%**|**16**|**48**|**33.3%**|
+|**sockaddr.Net**|**72**|**90**|**162**|**635**|**44.4%**|**19**|**52**|**36.5%**|
 |StirlingLabs.CleanUpAction|0|3|3|14|0%|0|0||
-|StirlingLabs.sockaddr|24|15|39|280|61.5%|4|8|50%|
+|StirlingLabs.sockaddr|27|15|42|293|64.2%|5|10|50%|
 |StirlingLabs.SockaddrAddressBytes|0|29|29|110|0%|0|10|0%|
 |StirlingLabs.SockaddrAddressBytesEnumerator|0|16|16|45|0%|0|2|0%|
-|StirlingLabs.SockaddrExtensions|43|27|70|170|61.4%|12|28|42.8%|
+|StirlingLabs.SockaddrExtensions|45|27|72|173|62.5%|14|30|46.6%|
