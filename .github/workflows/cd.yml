@@ -55,8 +55,9 @@ jobs:
                     name: sockaddr.Net
                     path: |
                         artifacts/*.nupkg
-                        coverage
                     if-no-files-found: error
+            -   name: Push NuGet Packages
+                run: dotnet nuget push artifacts/*.nupkg -k ${{github.token}} -s https://nuget.pkg.github.com/${{github.repository_owner}}/index.json -n 1 || true
     
     macos:
         name: Mac
