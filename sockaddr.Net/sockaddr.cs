@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using JetBrains.Annotations;
@@ -289,5 +290,17 @@ public readonly unsafe struct sockaddr
         get => SockaddrExtensions.GetScope(ref Unsafe.AsRef(this));
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         set => SockaddrExtensions.SetScope(ref Unsafe.AsRef(this), value);
+    }
+
+    public IPAddress IPAddress
+    {
+        get => SockaddrExtensions.GetIPAddress(ref Unsafe.AsRef(this));
+        set => SockaddrExtensions.SetIPAddress(ref Unsafe.AsRef(this), value);
+    }
+
+    public IPEndPoint EndPoint
+    {
+        get => SockaddrExtensions.ToEndPoint(ref Unsafe.AsRef(this));
+        set => SockaddrExtensions.CopyFromEndPoint(ref Unsafe.AsRef(this), value);
     }
 }

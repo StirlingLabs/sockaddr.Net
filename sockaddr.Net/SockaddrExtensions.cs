@@ -1,5 +1,9 @@
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using StirlingLabs.Utilities;
@@ -169,5 +173,91 @@ public static unsafe class SockaddrExtensions
             ? default
             : new Utf8String(sa_address_to_str(sa));
 
+    }
+
+    public static IPAddress GetIPAddress(ref this sockaddr self)
+    {
+        var sa = self.AsPointer();
+
+        if (sa->IsUnspec())
+            return IPAddress.IPv6Any;
+
+        var bytes = sa->GetAddressByteSpan();
+
+#if NETSTANDARD2_0
+        if (sa->IsIPv6())
+            return new(bytes.ToArray(), sa->GetScope());
+
+        return new(bytes.ToArray());
+#else
+        if (sa->IsIPv6())
+            return new(bytes, sa->GetScope());
+
+        return new(bytes);
+#endif
+    }
+
+    public static void SetIPAddress(ref this sockaddr self, IPAddress value)
+    {
+        if (value is null)
+            throw new ArgumentNullException(nameof(value));
+
+        var sa = self.AsPointer();
+
+        var bytes = sa->GetAddressByteSpan();
+
+        switch (value.AddressFamily)
+        {
+            case AddressFamily.InterNetwork: {
+                if (bytes.Length != 4 || !sa->IsIPv4())
+                    throw new InvalidOperationException("The address provided is not of the same address family.");
+#if NETSTANDARD2_0
+                value.GetAddressBytes().CopyTo(bytes);
+#else
+                if (!value.TryWriteBytes(bytes, out _))
+                    throw new InvalidOperationException("Failed to update IP Address.");
+#endif
+                break;
+            }
+            case AddressFamily.InterNetworkV6: {
+                if (bytes.Length != 16 || !sa->IsIPv6())
+                    throw new InvalidOperationException("The address provided is not of the same address family.");
+#if NETSTANDARD2_0
+                value.GetAddressBytes().CopyTo(bytes);
+#else
+                if (!value.TryWriteBytes(bytes, out _))
+                    throw new InvalidOperationException("Failed to update IP Address.");
+#endif
+                break;
+            }
+            case AddressFamily.Unspecified: {
+                if (!bytes.IsEmpty || !sa->IsUnspec())
+                    throw new InvalidOperationException("The address provided is not of the same address family.");
+                // do nothing
+                break;
+            }
+            default: {
+                throw new InvalidOperationException("The address provided is not of a supported address family.");
+            }
+        }
+    }
+
+    public static IPEndPoint ToEndPoint(ref this sockaddr self)
+    {
+        var sa = self.AsPointer();
+
+        return new(sa->GetIPAddress(), sa->GetPort());
+    }
+
+    public static void CopyFromEndPoint(ref this sockaddr self, IPEndPoint value)
+    {
+        if (value is null)
+            throw new ArgumentNullException(nameof(value));
+
+        var sa = self.AsPointer();
+
+        sa->SetIPAddress(value.Address);
+
+        sa->SetPort(checked((ushort)value.Port));
     }
 }

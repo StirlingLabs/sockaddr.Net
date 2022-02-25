@@ -211,6 +211,8 @@ public class Tests
     {
         var ip = IPAddress.Parse(address);
 
+        var ep = new IPEndPoint(ip, port);
+
         var addressBytes = ip.GetAddressBytes();
 
         var pSa = sockaddr.CreateIPv4(address, port);
@@ -233,6 +235,10 @@ public class Tests
 
         ref var sa = ref pSa->AsRef();
 
+        Assert.AreEqual(ip, pSa->GetIPAddress());
+
+        Assert.AreEqual(ep, pSa->ToEndPoint());
+
         Assert.True(sa.IsIPv4());
         Assert.False(sa.IsIPv6());
         Assert.False(sa.IsUnspec());
@@ -247,6 +253,10 @@ public class Tests
 
         Assert.AreEqual(port, sa.GetPort());
 
+        Assert.AreEqual(ip, sa.GetIPAddress());
+
+        Assert.AreEqual(ep, sa.ToEndPoint());
+
         Assert.AreEqual($"{address}:{port}", sa.ToString());
     }
 
@@ -254,6 +264,10 @@ public class Tests
     public unsafe void IPv6Tests(string address, ushort port, ushort scope)
     {
         var ip = IPAddress.Parse(address);
+
+        ip.ScopeId = scope;
+
+        var ep = new IPEndPoint(ip, port);
 
         var addressBytes = ip.GetAddressBytes();
 
@@ -274,6 +288,10 @@ public class Tests
         Assert.AreEqual(port, pSa->GetPort());
 
         Assert.AreEqual(scope, pSa->GetScope());
+
+        Assert.AreEqual(ip, pSa->GetIPAddress());
+
+        Assert.AreEqual(ep, pSa->ToEndPoint());
 
         if (scope == 0)
             Assert.AreEqual($"{address}:{port}", pSa->ToString());
@@ -298,6 +316,12 @@ public class Tests
         Assert.AreEqual(address, sa.GetAddressString().ToString());
 
         Assert.AreEqual(port, sa.GetPort());
+
+        Assert.AreEqual(scope, sa.GetScope());
+
+        Assert.AreEqual(ip, sa.GetIPAddress());
+
+        Assert.AreEqual(ep, sa.ToEndPoint());
 
         if (scope == 0)
             Assert.AreEqual($"{address}:{port}", pSa->ToString());
