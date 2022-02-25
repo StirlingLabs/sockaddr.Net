@@ -109,15 +109,7 @@ public static unsafe class SockaddrExtensions
     [SuppressMessage("Reliability", "CA2000", Justification = "Intentional")]
     public static string? ToString(ref this sockaddr self)
     {
-        void AddCleanUp1(string addressStr, Utf8String address)
-        {
-            if (!address.IsInterned)
-                StringCache.Add(addressStr, new(() => {
-                    sa_free(address.Pointer);
-                }));
-        }
-
-        void AddCleanUp2(string addressStr, Utf8String address, Utf8String scope)
+        void CleanUp(string addressStr, Utf8String address, Utf8String scope)
         {
             if (address.IsInterned)
                 return;
@@ -136,33 +128,33 @@ public static unsafe class SockaddrExtensions
         var pSa = self.AsPointer();
         if (pSa == null) return null;
 
-        var address = pSa->GetAddressString();
-        if (address == default) return null;
-
-        var addressStr = address.ToString();
-        if (addressStr == null) return null;
-
         if (pSa->IsUnspec())
             return $"*:{pSa->GetPort()}";
 
-        if (pSa->IsIPv6())
-        {
-            var scope = pSa->GetScopeName();
-            if (scope == default)
-            {
-                AddCleanUp1(addressStr, address);
-                var scopeIndex = pSa->GetScope();
-                return scopeIndex != 0
-                    ? $"{address}:{pSa->GetPort()}%{scopeIndex}"
-                    : $"{address}:{pSa->GetPort()}";
-            }
+        if (pSa->IsIPv4())
+            return pSa->ToEndPoint().ToString();
 
-            AddCleanUp2(addressStr, address, scope);
-            return $"{address}:{pSa->GetPort()}%{scope}";
+        // IPv6
+
+        var scope = pSa->GetScopeName();
+
+        if (scope == default)
+            return pSa->ToEndPoint().ToString();
+
+        var address = pSa->GetAddressString();
+        if (address == default)
+            return null;
+
+        var addressStr = address.ToString();
+        if (addressStr == null)
+        {
+            address.Free();
+            return null;
         }
 
-        AddCleanUp1(addressStr, address);
-        return $"{address}:{pSa->GetPort()}";
+        CleanUp(addressStr, address, scope);
+        return $"[{addressStr}]:{pSa->GetPort()}%{scope}";
+
     }
 
     public static Utf8String GetAddressString(ref this sockaddr self)

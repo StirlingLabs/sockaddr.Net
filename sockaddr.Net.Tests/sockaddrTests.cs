@@ -294,13 +294,13 @@ public class Tests
         Assert.AreEqual(ep, pSa->ToEndPoint());
 
         if (scope == 0)
-            Assert.AreEqual($"{address}:{port}", pSa->ToString());
+            Assert.AreEqual($"[{address}]:{port}", pSa->ToString());
         else
         {
             var scopeName = sockaddr.GetNameOfScope(scope);
             Assert.AreEqual(scopeName == default
-                    ? $"{address}:{port}%{scope}"
-                    : $"{address}:{port}%{scopeName}",
+                    ? $"[{address}]:{port}%{scope}"
+                    : $"[{address}]:{port}%{scopeName}",
                 pSa->ToString());
         }
 
@@ -324,13 +324,13 @@ public class Tests
         Assert.AreEqual(ep, sa.ToEndPoint());
 
         if (scope == 0)
-            Assert.AreEqual($"{address}:{port}", pSa->ToString());
+            Assert.AreEqual($"[{address}]:{port}", pSa->ToString());
         else
         {
             var scopeName = sockaddr.GetNameOfScope(scope);
             Assert.AreEqual(scopeName == default
-                    ? $"{address}:{port}%{scope}"
-                    : $"{address}:{port}%{scopeName}",
+                    ? $"[{address}]:{port}%{scope}"
+                    : $"[{address}]:{port}%{scopeName}",
                 sa.ToString());
         }
     }
