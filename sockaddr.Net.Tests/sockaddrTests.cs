@@ -90,8 +90,9 @@ public class Tests
     [SuppressMessage("Warning", "CS1718", Justification = "Yes")]
     public unsafe void ReferenceEqualityIPv4Tests(string address, ushort port)
     {
+        var ip = IPAddress.Parse(address);
         var pSa1 = sockaddr.CreateIPv4(address, port);
-        var pSa2 = sockaddr.CreateIPv4(address, port);
+        var pSa2 = sockaddr.CreateIPv4(ip, port);
         ref var sa1 = ref pSa1->AsRef();
         ref var sa2 = ref pSa2->AsRef();
 
@@ -130,8 +131,9 @@ public class Tests
     [SuppressMessage("Warning", "CS1718", Justification = "Yes")]
     public unsafe void ReferenceEqualityIPv6Tests(string address, ushort port, ushort scope)
     {
+        var ip = IPAddress.Parse(address);
         var pSa1 = sockaddr.CreateIPv6(address, port, scope);
-        var pSa2 = sockaddr.CreateIPv6(address, port, scope);
+        var pSa2 = sockaddr.CreateIPv6(ip, port, scope);
         ref var sa1 = ref pSa1->AsRef();
         ref var sa2 = ref pSa2->AsRef();
 
@@ -271,7 +273,7 @@ public class Tests
 
         var addressBytes = ip.GetAddressBytes();
 
-        var pSa = sockaddr.CreateIPv6(address, port, scope);
+        var pSa = sockaddr.Create(ep, scope);
 
         Assert.True(pSa->IsIPv6());
         Assert.False(pSa->IsIPv4());

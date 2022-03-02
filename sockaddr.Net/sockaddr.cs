@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using JetBrains.Annotations;
@@ -62,7 +63,19 @@ public readonly unsafe struct sockaddr
     [SuppressGCTransition]
 #endif
     [DllImport(LibName, ExactSpelling = true)]
+    internal static extern sockaddr* sa_ipv4_bin(byte* str, ushort port);
+
+#if NET5_0_OR_GREATER
+    [SuppressGCTransition]
+#endif
+    [DllImport(LibName, ExactSpelling = true)]
     internal static extern sockaddr* sa_ipv6(sbyte* str, ushort port);
+
+#if NET5_0_OR_GREATER
+    [SuppressGCTransition]
+#endif
+    [DllImport(LibName, ExactSpelling = true)]
+    internal static extern sockaddr* sa_ipv6_bin(byte* str, ushort port);
 
 #if NET5_0_OR_GREATER
     [SuppressGCTransition]
@@ -165,18 +178,128 @@ public readonly unsafe struct sockaddr
     public static readonly int AF_INET = sa_get_family_ipv4();
     public static readonly int AF_INET6 = sa_get_family_ipv6();
 
+    public static sockaddr* Create(IPAddress address, ushort port)
+    {
+        if (address is null) throw new ArgumentNullException(nameof(address));
+
+        bool isV4;
+        switch (address.AddressFamily)
+        {
+            case AddressFamily.Unspecified:
+                return CreateUnspec(port);
+            case AddressFamily.InterNetwork:
+                isV4 = true;
+                break;
+            case AddressFamily.InterNetworkV6:
+                isV4 = false;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(address),
+                    "Address Family must be InterNetwork or InterNetworkV6.");
+        }
+
+        Span<byte> addressBytes = stackalloc byte[isV4 ? 4 : 16];
+
+#if NETSTANDARD2_0
+        address.GetAddressBytes().CopyTo(addressBytes);
+#else
+        if (!address.TryWriteBytes(addressBytes, out _))
+            throw new InvalidOperationException("Unable to extract address bytes.");
+#endif
+
+        fixed (byte* p = addressBytes)
+        {
+            var result = isV4
+                ? sa_ipv4_bin(p, port)
+                : sa_ipv6_bin(p, port);
+
+            if (result == null) throw new ArgumentException("Invalid arguments.");
+
+            return result;
+        }
+    }
+
     public static sockaddr* CreateUnspec(ushort port)
     {
         var result = sa_unspec(port);
         if (result == null) throw new ArgumentException("Invalid arguments.");
         return result;
     }
-    
+
     public static sockaddr* CreateIPv4(Utf8String address, ushort port)
     {
         var result = sa_ipv4(address.Pointer, port);
         if (result == null) throw new ArgumentException("Invalid arguments.");
         return result;
+    }
+
+    public static sockaddr* CreateIPv4(string address, ushort port)
+    {
+        if (address is null) throw new ArgumentNullException(nameof(address));
+        return CreateIPv4(IPAddress.Parse(address), port);
+    }
+
+#if !NETSTANDARD
+    public static sockaddr* Create(string endPoint)
+    {
+        if (endPoint is null) throw new ArgumentNullException(nameof(endPoint));
+        var ep = IPEndPoint.Parse(endPoint);
+        return Create(ep);
+    }
+#endif
+
+    public static sockaddr* Create(string address, ushort port)
+    {
+        if (address is null) throw new ArgumentNullException(nameof(address));
+        return Create(IPAddress.Parse(address), port);
+    }
+
+    public static sockaddr* Create(IPEndPoint endPoint)
+    {
+        if (endPoint is null) throw new ArgumentNullException(nameof(endPoint));
+        return Create(endPoint.Address, checked((ushort)endPoint.Port));
+    }
+
+    public static sockaddr* Create(IPEndPoint endPoint, ushort scope)
+    {
+        if (endPoint is null) throw new ArgumentNullException(nameof(endPoint));
+        var sa = Create(endPoint.Address, checked((ushort)endPoint.Port));
+        sa->SetScope(scope);
+        return sa;
+    }
+
+    public static sockaddr* Create(IPEndPoint endPoint, Utf8String scope)
+    {
+        if (endPoint is null) throw new ArgumentNullException(nameof(endPoint));
+        var sa = Create(endPoint.Address, checked((ushort)endPoint.Port));
+        sa->SetScopeByName(scope);
+        return sa;
+    }
+
+    public static sockaddr* CreateIPv4(IPAddress address, ushort port)
+    {
+        if (address is null)
+            throw new ArgumentNullException(nameof(address));
+        if (address.AddressFamily != AddressFamily.InterNetwork)
+            throw new ArgumentOutOfRangeException(nameof(address));
+
+        Span<byte> addressBytes = stackalloc byte[4];
+
+#if NETSTANDARD2_0
+        address.GetAddressBytes().CopyTo(addressBytes);
+#else
+        if (!address.TryWriteBytes(addressBytes, out _))
+            throw new InvalidOperationException("Unable to extract address bytes.");
+#endif
+
+        fixed (byte* p = addressBytes)
+        {
+            var sa = sa_ipv4_bin(p, port);
+
+            if (sa == null) throw new ArgumentException("Invalid arguments.");
+
+            return sa;
+        }
     }
 
     public static sockaddr* CreateIPv6(Utf8String address, ushort port)
@@ -186,6 +309,12 @@ public readonly unsafe struct sockaddr
         return result;
     }
 
+    public static sockaddr* CreateIPv6(string address, ushort port)
+    {
+        if (address is null) throw new ArgumentNullException(nameof(address));
+        return CreateIPv6(IPAddress.Parse(address), port);
+    }
+
     public static sockaddr* CreateIPv6(Utf8String address, ushort port, ushort scope)
     {
         var sa = CreateIPv6(address, port);
@@ -193,10 +322,66 @@ public readonly unsafe struct sockaddr
         return sa;
     }
 
+    public static sockaddr* CreateIPv6(string address, ushort port, ushort scope)
+    {
+        if (address is null) throw new ArgumentNullException(nameof(address));
+        return CreateIPv6(IPAddress.Parse(address), port, scope);
+    }
+
     public static sockaddr* CreateIPv6(Utf8String address, ushort port, Utf8String scope)
     {
         var sa = CreateIPv6(address, port);
         if (scope != default) sa->SetScopeByName(scope);
+        return sa;
+    }
+
+    public static sockaddr* CreateIPv6(string address, ushort port, Utf8String scope)
+    {
+        if (address is null) throw new ArgumentNullException(nameof(address));
+        return CreateIPv6(IPAddress.Parse(address), port, scope);
+    }
+
+    public static sockaddr* CreateIPv6(IPAddress address, ushort port)
+    {
+        if (address is null)
+            throw new ArgumentNullException(nameof(address));
+        if (address.AddressFamily != AddressFamily.InterNetworkV6)
+            throw new ArgumentOutOfRangeException(nameof(address));
+
+        Span<byte> addressBytes = stackalloc byte[16];
+
+#if NETSTANDARD2_0
+        address.GetAddressBytes().CopyTo(addressBytes);
+#else
+        if (!address.TryWriteBytes(addressBytes, out _))
+            throw new InvalidOperationException("Unable to extract address bytes.");
+#endif
+
+        fixed (byte* p = addressBytes)
+        {
+            var sa = sa_ipv6_bin(p, port);
+
+            if (sa == null) throw new ArgumentException("Invalid arguments.");
+
+            return sa;
+        }
+    }
+
+    public static sockaddr* CreateIPv6(IPAddress address, ushort port, Utf8String scope)
+    {
+        var sa = CreateIPv6(address, port);
+
+        if (scope != default) sa->SetScopeByName(scope);
+
+        return sa;
+    }
+
+    public static sockaddr* CreateIPv6(IPAddress address, ushort port, ushort scope)
+    {
+        var sa = CreateIPv6(address, port);
+
+        if (scope != default) sa->SetScope(scope);
+
         return sa;
     }
 
@@ -303,4 +488,12 @@ public readonly unsafe struct sockaddr
         get => SockaddrExtensions.ToEndPoint(ref Unsafe.AsRef(this));
         set => SockaddrExtensions.CopyFromEndPoint(ref Unsafe.AsRef(this), value);
     }
+
+    [SuppressMessage("Usage", "CA2225", Justification = "See EndPoint Property")]
+    public static implicit operator IPEndPoint(in sockaddr sa)
+        => Unsafe.AsRef(sa).AsPointer()->EndPoint;
+
+    [SuppressMessage("Usage", "CA2225", Justification = "See IPAddress Property")]
+    public static implicit operator IPAddress(in sockaddr sa)
+        => Unsafe.AsRef(sa).AsPointer()->IPAddress;
 }
