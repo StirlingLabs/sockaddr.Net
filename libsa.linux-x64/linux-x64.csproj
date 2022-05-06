@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.Build.NoTargets/3.3.0">
 
     <PropertyGroup>
-        <PackageId>runtime.linux-x64.libsa</PackageId>
-        <AssemblyName>runtime.linux-x64.libsa</AssemblyName>
+        <PackageId>StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa</PackageId>
+        <AssemblyName>StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa</AssemblyName>
         <TargetFrameworks>net5.0;net6.0;netstandard2.0;netstandard2.1</TargetFrameworks>
         <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Nullable>enable</Nullable>
-        <RootNamespace>Microsoft.Quic</RootNamespace>
+        <RootNamespace>libsa</RootNamespace>
         <LangVersion>10</LangVersion>
         <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
         <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>

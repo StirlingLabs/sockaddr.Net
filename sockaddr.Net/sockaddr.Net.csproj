@@ -5,6 +5,8 @@
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>10</LangVersion>
+        <AssemblyName>StirlingLabs.sockaddr.Net</AssemblyName>
+        <RootNamespace>StirlingLabs.sockaddr.Net</RootNamespace>
     </PropertyGroup>
     
     <PropertyGroup Condition="'$(CI)'!=''">
@@ -13,13 +15,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Fody" Version="6.6.0">
+      <PackageReference Include="Fody" Version="6.6.1">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
       <PackageReference Include="InlineIL.Fody" Version="1.7.1" PrivateAssets="all" />
-      <PackageReference Include="JetBrains.Annotations" Version="2021.3.0" PrivateAssets="all" />
-      <PackageReference Include="StirlingLabs.Utilities" Version="22.2.5" />
+      <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" PrivateAssets="all" />
+      <PackageReference Include="StirlingLabs.Utilities" Version="22.5.0" />
+      <PackageReference Include="StirlingLabs.Utilities.Magic" Version="22.5.0" />
+      <PackageReference Include="StirlingLabs.BigSpans" Version="22.5.0" />
     </ItemGroup>
 
     <ImportGroup>
