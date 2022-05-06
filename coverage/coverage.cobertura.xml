@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<coverage line-rate="0.4122" branch-rate="0.2878" version="1.9" timestamp="1651861146" lines-covered="108" lines-valid="262" branches-covered="38" branches-valid="132">
+<coverage line-rate="0.4122" branch-rate="0.2878" version="1.9" timestamp="1651863337" lines-covered="108" lines-valid="262" branches-covered="38" branches-valid="132">
   <sources />
   <packages>
-    <package name="sockaddr.Net" line-rate="0.4122" branch-rate="0.2878" complexity="205">
+    <package name="StirlingLabs.sockaddr.Net" line-rate="0.4122" branch-rate="0.2878" complexity="205">
       <classes>
         <class name="StirlingLabs.CleanUpAction" filename="/_/sockaddr.Net/CleanUpAction.cs" line-rate="0.6666" branch-rate="1" complexity="2">
           <methods>
