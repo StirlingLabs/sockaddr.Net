@@ -10,6 +10,19 @@
         <RuntimeIdentifier>osx</RuntimeIdentifier>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <Description>
+            Cross-platform socket addresses.  Simply cast from native to StirlingLabs.sockaddr*
+            for validation or manipulation without regard to the native format, then cast
+            back to use in a native API.
+        </Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
     <PropertyGroup Condition="'$(CI)'!=''">
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageOutputPath>../artifacts</PackageOutputPath>

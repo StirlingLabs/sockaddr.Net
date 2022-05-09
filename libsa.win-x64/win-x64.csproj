@@ -18,6 +18,12 @@
         <IncludeBuildOutput>false</IncludeBuildOutput>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <Description>
+            Windows-specific bindings for StirlingLabs.sockaddr.Net.
+        </Description>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(CI)'!=''">
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageOutputPath>../artifacts</PackageOutputPath>

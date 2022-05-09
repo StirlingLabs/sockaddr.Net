@@ -1,4 +1,4 @@
-![StirlingLabs.sockaddr.Net](sockaddr-dotnet.jpg)
+![StirlingLabs.sockaddr.Net](https://raw.githubusercontent.com/StirlingLabs/sockaddr.Net/main/sockaddr-dotnet.jpg)
 
 > [libsa](https://github.com/StirlingLabs/libsa) provides cross-platform socket address bindings in C11, designed to be very portable and easy to use.  This allows higher-level network code to use a single format but still communicate effectively with low-level native platform code.
 
@@ -10,16 +10,8 @@ So addresses from any application or API that uses native bindings can be simply
 
 `sockaddr` isn't going to change once it exists on a platform, so it makes sense to just make a dedicated binding and interop library that can be used anywhere.
 
-### Usage
-
-Configure [GitHub Packages](https://github.com/StirlingLabs/Logging/blob/master/docs/GitHubPackages.md), then you can just:
-
-```shell
-dotnet add PROJECT package StirlingLabs.sockaddr.Net
-```
-
-or just use NuGet however you would normally.
-
 ### Support
 
-Development of this project is supported by [Stirling Labs](https://stirlinglabs.github.io).
+Documentation for libsa can be found at https://stirlinglabs.github.io/libsa
+
+Developed by [Stirling Labs](https://stirlinglabs.github.io).
