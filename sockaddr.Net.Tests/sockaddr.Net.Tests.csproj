@@ -28,10 +28,10 @@
         </When>
         <When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
             <PropertyGroup>
-                <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+                <RuntimeIdentifier>osx</RuntimeIdentifier>
             </PropertyGroup>
             <ItemGroup>
-                <ProjectReference Include="../libsa.osx-x64/osx-x64.csproj">
+                <ProjectReference Include="../libsa.osx/osx.csproj">
                     <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
                     <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
                 </ProjectReference>

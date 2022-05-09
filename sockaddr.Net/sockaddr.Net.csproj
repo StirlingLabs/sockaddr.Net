@@ -7,27 +7,53 @@
         <LangVersion>10</LangVersion>
         <AssemblyName>StirlingLabs.sockaddr.Net</AssemblyName>
         <RootNamespace>StirlingLabs.sockaddr.Net</RootNamespace>
+        <RuntimeIdentifier>osx</RuntimeIdentifier>
     </PropertyGroup>
-    
+
     <PropertyGroup Condition="'$(CI)'!=''">
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageOutputPath>../artifacts</PackageOutputPath>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Fody" Version="6.6.1">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="InlineIL.Fody" Version="1.7.1" PrivateAssets="all" />
-      <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" PrivateAssets="all" />
-      <PackageReference Include="StirlingLabs.Utilities" Version="22.5.0" />
-      <PackageReference Include="StirlingLabs.Utilities.Magic" Version="22.5.0" />
-      <PackageReference Include="StirlingLabs.BigSpans" Version="22.5.0" />
+        <PackageReference Include="Fody" Version="6.6.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="InlineIL.Fody" Version="1.7.1" PrivateAssets="all"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" PrivateAssets="all"/>
+        <PackageReference Include="StirlingLabs.Utilities" Version="22.5.0"/>
+        <PackageReference Include="StirlingLabs.Utilities.Magic" Version="22.5.0"/>
+        <PackageReference Include="StirlingLabs.BigSpans" Version="22.5.0"/>
     </ItemGroup>
 
     <ImportGroup>
-      <Import Project="../Version.proj" />
+        <Import Project="../Version.proj"/>
     </ImportGroup>
 
+    <ItemGroup>
+        <None Include="StirlingLabs.sockaddr.Net.props">
+            <Pack>true</Pack>
+            <PackagePath>build</PackagePath>
+        </None>
+        <None Include="StirlingLabs.sockaddr.Net.targets">
+            <Pack>true</Pack>
+            <PackagePath>build</PackagePath>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\libsa.linux-x64\linux-x64.csproj">
+            <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
+            <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
+        </ProjectReference>
+        <ProjectReference Include="..\libsa.osx\osx.csproj" Condition="'$(TargetFramework)' != 'net5.0'">
+            <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
+            <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
+        </ProjectReference>
+        <ProjectReference Include="..\libsa.win-x64\win-x64.csproj">
+            <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
+            <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
+        </ProjectReference>
+    </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "win-x64", "libsa.win-x64\wi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "runtimes", "runtimes", "{727ACE80-98C9-4266-A8D1-EBCDF26CAE54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "osx-x64", "libsa.osx-x64\osx-x64.csproj", "{180606B8-F93D-4B0D-AA9B-216FD886D03A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "osx", "libsa.osx\osx.csproj", "{180606B8-F93D-4B0D-AA9B-216FD886D03A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "linux-x64", "libsa.linux-x64\linux-x64.csproj", "{527AB1FA-120D-484A-ADBC-DA89CC523C8E}"
 EndProject

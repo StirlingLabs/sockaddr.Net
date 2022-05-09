@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+    <Target Name="StirlingLabs.sockaddr.Net.Select" BeforeTargets="CollectPackageReferences">
+        <ItemGroup Condition="$(OutputType.Contains('Exe'))">
+            <ProjectReference
+                Condition="!$(RuntimeIdentifier.StartsWith('linux'))"
+                Remove="StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa" />
+            <ProjectReference
+                Condition="!$(RuntimeIdentifier.StartsWith('osx'))"
+                Remove="StirlingLabs.sockaddr.Net.runtime.osx.libsa" />
+            <ProjectReference
+                Condition="!$(RuntimeIdentifier.StartsWith('win'))"
+                Remove="StirlingLabs.sockaddr.Net.runtime.win-x64.libsa" />
+        </ItemGroup>
+    </Target>
+</Project>
