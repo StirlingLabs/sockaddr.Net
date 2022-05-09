@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
-    <Target Name="StirlingLabs.sockaddr.Net.Select" BeforeTargets="CollectPackageReferences">
+    <Target Name="StirlingLabsSockaddrNetSelect" BeforeTargets="CollectPackageReferences">
         <ItemGroup Condition="$(OutputType.Contains('Exe'))">
             <ProjectReference
                 Condition="!$(RuntimeIdentifier.StartsWith('linux'))"
