@@ -12,39 +12,28 @@
         <DeterministicReport>true</DeterministicReport>
         <DeterministicSourcePaths>true</DeterministicSourcePaths>
         <OutputType>Library</OutputType>
+        <RuntimeIdentifier>$(NETCoreSdkPortableRuntimeIdentifier)</RuntimeIdentifier>
     </PropertyGroup>
 
     <Choose>
-        <When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-            <PropertyGroup>
-                <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-            </PropertyGroup>
+        <When Condition="$(RuntimeIdentifier.StartsWith('linux'))">
             <ItemGroup>
                 <ProjectReference Include="../libsa.linux-x64/linux-x64.csproj">
                     <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
-                    <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
                 </ProjectReference>
             </ItemGroup>
         </When>
-        <When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-            <PropertyGroup>
-                <RuntimeIdentifier>osx</RuntimeIdentifier>
-            </PropertyGroup>
+        <When Condition="$(RuntimeIdentifier.StartsWith('osx'))">
             <ItemGroup>
                 <ProjectReference Include="../libsa.osx/osx.csproj">
                     <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
-                    <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
                 </ProjectReference>
             </ItemGroup>
         </When>
-        <When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-            <PropertyGroup>
-                <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-            </PropertyGroup>
+        <When Condition="$(RuntimeIdentifier.StartsWith('win'))">
             <ItemGroup>
                 <ProjectReference Include="../libsa.win-x64/win-x64.csproj">
                     <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
-                    <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
                 </ProjectReference>
             </ItemGroup>
         </When>

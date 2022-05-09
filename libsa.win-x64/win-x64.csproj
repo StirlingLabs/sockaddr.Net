@@ -15,7 +15,11 @@
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <IncludeBuildOutput>true</IncludeBuildOutput>
+        <NoPackageAnalysis>true</NoPackageAnalysis>
+        <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+        <IncludeContent>true</IncludeContent>
+        <NoWarn>CS2008;NETSDK1086</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -30,18 +34,24 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Include="sa.dll">
+        <!-- hack to get rid of NU5017 -->
+        <FrameworkReference Include="Microsoft.NETCore.App" Condition="'$(TargetFramework)'=='net5.0'" />
+        <FrameworkReference Include="Microsoft.NETCore.App" Condition="'$(TargetFramework)'=='net6.0'" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="sa.dll">
             <Pack>True</Pack>
-            <PackageCopyToOutput>True</PackageCopyToOutput>
-            <PackagePath>runtimes/win-x64/native/sa.dll</PackagePath>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <PackageCopyToOutput>False</PackageCopyToOutput>
+            <PackagePath>runtimes/win-x64/native/</PackagePath>
             <Link>%(Identity)</Link>
-        </Content>
+        </None>
+        <None Update="sa.dll" Condition="$(RuntimeIdentifier.StartsWith('win'))">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ImportGroup>
         <Import Project="../Version.proj"/>
     </ImportGroup>
-
-
 </Project>

@@ -15,7 +15,11 @@
         <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <IncludeBuildOutput>true</IncludeBuildOutput>
+        <NoPackageAnalysis>true</NoPackageAnalysis>
+        <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+        <IncludeContent>true</IncludeContent>
+        <NoWarn>CS2008;NETSDK1086</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -30,18 +34,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Include="libsa.dylib">
+        <!-- hack to get rid of NU5017 -->
+        <FrameworkReference Include="Microsoft.NETCore.App" Condition="'$(TargetFramework)'=='net5.0'" />
+        <FrameworkReference Include="Microsoft.NETCore.App" Condition="'$(TargetFramework)'=='net6.0'" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="libsa.dylib">
             <Pack>True</Pack>
-            <PackageCopyToOutput>True</PackageCopyToOutput>
-            <PackagePath>runtimes/osx-x64/native/libsa.dylib</PackagePath>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <PackageCopyToOutput>False</PackageCopyToOutput>
+            <PackagePath>runtimes/osx-x64/native/</PackagePath>
             <Link>%(Identity)</Link>
-        </Content>
+        </None>
     </ItemGroup>
 
     <ImportGroup>
         <Import Project="../Version.proj"/>
     </ImportGroup>
-
-
 </Project>

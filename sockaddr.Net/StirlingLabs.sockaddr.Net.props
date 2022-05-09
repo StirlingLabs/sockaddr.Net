@@ -1,3 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
+    <PropertyGroup>
+        <StirlingLabsSockaddrNetSelectRuntimeId Condition="'$(StirlingLabsSockaddrNetSelectRuntimeId)'==''">$(RuntimeIdentifier)</StirlingLabsSockaddrNetSelectRuntimeId>
+        <StirlingLabsSockaddrNetSelectRuntimeId Condition="'$(StirlingLabsSockaddrNetSelectRuntimeId)'==''">$(NETCoreSdkPortableRuntimeIdentifier)</StirlingLabsSockaddrNetSelectRuntimeId>
+        <BuildDependsOn>StirlingLabsSockaddrNetSelectRuntime;$(BuildDependsOn)</BuildDependsOn>
+        <CompileDependsOn>StirlingLabsSockaddrNetSelectRuntime;$(BuildDependsOn)</CompileDependsOn>
+        <ResolveReferencesDependsOn>StirlingLabsSockaddrNetSelectRuntime;$(ResolveReferencesDependsOn)</ResolveReferencesDependsOn>
+        <GenerateNuspecDependsOn>StirlingLabsSockaddrNetSelectRuntime;$(GenerateNuspecDependsOn)</GenerateNuspecDependsOn>
+    </PropertyGroup>
 </Project>
