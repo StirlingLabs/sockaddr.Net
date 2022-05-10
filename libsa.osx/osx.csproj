@@ -42,7 +42,7 @@
     <ItemGroup>
         <None Include="libsa.dylib">
             <Pack>True</Pack>
-            <PackageCopyToOutput>False</PackageCopyToOutput>
+            <PackageCopyToOutput>True</PackageCopyToOutput>
             <PackagePath>runtimes/osx-x64/native/</PackagePath>
             <Link>%(Identity)</Link>
         </None>

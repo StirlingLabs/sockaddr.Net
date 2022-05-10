@@ -3,38 +3,34 @@
     <ImportGroup>
         <Import Project="StirlingLabs.sockaddr.Net.props"/>
     </ImportGroup>
+    <Target Name="StirlingLabsSockaddrNetSelectRuntimeForPacking" BeforeTargets="Pack">
+        <Message Importance="high" Text="=== StirlingLabsSockaddrNetSelectRuntimeForPacking ===" /> 
+        <PropertyGroup>
+            <!-- specify all runtimes -->
+            <StirlingLabsSockaddrNetSelectAllRuntimes/>
+        </PropertyGroup>
+    </Target>
     <Target Name="StirlingLabsSockaddrNetSelectRuntime" BeforeTargets="_LoadRestoreGraphEntryPoints;_GenerateRestoreProjectSpec;Restore;CoreBuild">
+        <Message Importance="high" Text="=== StirlingLabsSockaddrNetSelectRuntime ===" />
         <ItemGroup Condition="'$(StirlingLabsSockaddrNetSelectAllRuntimes)'!='' OR '$(StirlingLabsSockaddrNetSelectRuntimeId)'==''">
-            <ProjectReference
-                Include="StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa"/>
-            <ProjectReference
-                Include="StirlingLabs.sockaddr.Net.runtime.osx-x64.libsa"/>
-            <ProjectReference
-                Include="StirlingLabs.sockaddr.Net.runtime.win-x64.libsa"/>
+            <ProjectReference Include="StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa"/>
+            <ProjectReference Include="StirlingLabs.sockaddr.Net.runtime.osx-x64.libsa"/>
+            <ProjectReference Include="StirlingLabs.sockaddr.Net.runtime.win-x64.libsa"/>
         </ItemGroup>
         <ItemGroup Condition="'$(StirlingLabsSockaddrNetSelectAll)'=='' AND $(StirlingLabsSockaddrNetSelectRuntimeId.StartsWith('linux'))">
-            <ProjectReference
-                Include="StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa"/>
-            <ProjectReference
-                Remove="StirlingLabs.sockaddr.Net.runtime.osx-x64.libsa"/>
-            <ProjectReference
-                Remove="StirlingLabs.sockaddr.Net.runtime.win-x64.libsa"/>
+            <ProjectReference Include="StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa"/>
+            <ProjectReference Remove="StirlingLabs.sockaddr.Net.runtime.osx-x64.libsa"/>
+            <ProjectReference Remove="StirlingLabs.sockaddr.Net.runtime.win-x64.libsa"/>
         </ItemGroup>
         <ItemGroup Condition="'$(StirlingLabsSockaddrNetSelectAll)'=='' AND $(StirlingLabsSockaddrNetSelectRuntimeId.StartsWith('osx'))">
-            <ProjectReference
-                Include="StirlingLabs.sockaddr.Net.runtime.osx.libsa"/>
-            <ProjectReference
-                Remove="StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa"/>
-            <ProjectReference
-                Remove="StirlingLabs.sockaddr.Net.runtime.win-x64.libsa"/>
+            <ProjectReference Include="StirlingLabs.sockaddr.Net.runtime.osx.libsa"/>
+            <ProjectReference Remove="StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa"/>
+            <ProjectReference Remove="StirlingLabs.sockaddr.Net.runtime.win-x64.libsa"/>
         </ItemGroup>
         <ItemGroup Condition="'$(StirlingLabsSockaddrNetSelectAll)'=='' AND $(StirlingLabsSockaddrNetSelectRuntimeId.StartsWith('win'))">
-            <ProjectReference
-                Include="StirlingLabs.sockaddr.Net.runtime.win-x64.libsa"/>
-            <ProjectReference
-                Remove="StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa"/>
-            <ProjectReference
-                Remove="StirlingLabs.sockaddr.Net.runtime.osx-x64.libsa"/>
+            <ProjectReference Include="StirlingLabs.sockaddr.Net.runtime.win-x64.libsa"/>
+            <ProjectReference Remove="StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa"/>
+            <ProjectReference Remove="StirlingLabs.sockaddr.Net.runtime.osx-x64.libsa"/>
         </ItemGroup>
     </Target>
 </Project>

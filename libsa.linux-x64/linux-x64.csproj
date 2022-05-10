@@ -42,7 +42,7 @@
     <ItemGroup>
         <None Include="libsa.so">
             <Pack>True</Pack>
-            <PackageCopyToOutput>False</PackageCopyToOutput>
+            <PackageCopyToOutput>True</PackageCopyToOutput>
             <PackagePath>runtimes/linux-x64/native/</PackagePath>
             <Link>%(Identity)</Link>
         </None>
