@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.Build.NoTargets/3.3.0">
 
     <PropertyGroup>
-        <PackageId>StirlingLabs.sockaddr.Net.runtime.osx-x64.libsa</PackageId>
-        <AssemblyName>StirlingLabs.sockaddr.Net.runtime.osx-x64.libsa</AssemblyName>
+        <PackageId>StirlingLabs.sockaddr.Net.runtime.osx.libsa</PackageId>
+        <AssemblyName>StirlingLabs.sockaddr.Net.runtime.osx.libsa</AssemblyName>
         <TargetFrameworks>net6.0;netstandard2.0;netstandard2.1</TargetFrameworks>
         <RuntimeIdentifier>osx</RuntimeIdentifier>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -43,7 +43,8 @@
         <None Include="libsa.dylib">
             <Pack>True</Pack>
             <PackageCopyToOutput>True</PackageCopyToOutput>
-            <PackagePath>runtimes/osx-x64/native/</PackagePath>
+            <PackagePath>runtimes/osx/native/libsa.dylib</PackagePath>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Link>%(Identity)</Link>
         </None>
     </ItemGroup>

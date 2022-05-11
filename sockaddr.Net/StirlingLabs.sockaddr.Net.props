@@ -1,11 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
     <PropertyGroup>
+        <StirlingLabsSockaddrNetVersion>@(PackageReference->WithMetadataValue('Identity','StirlingLabs.sockaddr.Net')->Metadata('Version'))</StirlingLabsSockaddrNetVersion>
         <StirlingLabsSockaddrNetSelectRuntimeId Condition="'$(StirlingLabsSockaddrNetSelectRuntimeId)'==''">$(RuntimeIdentifier)</StirlingLabsSockaddrNetSelectRuntimeId>
+        <StirlingLabsSockaddrNetSelectRuntimeId Condition="'$(StirlingLabsSockaddrNetSelectRuntimeId)'==''">$(DefaultAppHostRuntimeIdentifier)</StirlingLabsSockaddrNetSelectRuntimeId>
         <StirlingLabsSockaddrNetSelectRuntimeId Condition="'$(StirlingLabsSockaddrNetSelectRuntimeId)'==''">$(NETCoreSdkPortableRuntimeIdentifier)</StirlingLabsSockaddrNetSelectRuntimeId>
+        <StirlingLabsSockaddrNetSelectRuntimeId Condition="'$(StirlingLabsSockaddrNetSelectRuntimeId)'==''">$(NETCoreSdkRuntimeIdentifier)</StirlingLabsSockaddrNetSelectRuntimeId>
+        <StirlingLabsSockaddrNetSelectAllRuntimes Condition="'$(StirlingLabsSockaddrNetSelectAllRuntimes)'!='False' AND '$(StirlingLabsSockaddrNetSelectAllRuntimes)'!=''">True</StirlingLabsSockaddrNetSelectAllRuntimes>
+        <StirlingLabsSockaddrNetSelectAllRuntimes Condition="'$(StirlingLabsSockaddrNetSelectAllRuntimes)'=='False' OR '$(StirlingLabsSockaddrNetSelectAllRuntimes)'!='True'">False</StirlingLabsSockaddrNetSelectAllRuntimes>
         <BuildDependsOn>StirlingLabsSockaddrNetSelectRuntime;$(BuildDependsOn)</BuildDependsOn>
         <CompileDependsOn>StirlingLabsSockaddrNetSelectRuntime;$(BuildDependsOn)</CompileDependsOn>
         <ResolveReferencesDependsOn>StirlingLabsSockaddrNetSelectRuntime;$(ResolveReferencesDependsOn)</ResolveReferencesDependsOn>
         <GenerateNuspecDependsOn>StirlingLabsSockaddrNetSelectRuntime;$(GenerateNuspecDependsOn)</GenerateNuspecDependsOn>
     </PropertyGroup>
+
+    <PropertyGroup Condition="'$(StirlingLabsSockaddrNetSelectRuntimeId)'==''">
+        <StirlingLabsSockaddrNetSelectRuntimeId Condition="$([MSBuild]::IsOSPlatform('Windows'))">win-x64</StirlingLabsSockaddrNetSelectRuntimeId>
+        <StirlingLabsSockaddrNetSelectRuntimeId Condition="$([MSBuild]::IsOSPlatform('OSX'))">osx</StirlingLabsSockaddrNetSelectRuntimeId>
+        <StirlingLabsSockaddrNetSelectRuntimeId Condition="$([MSBuild]::IsOSPlatform('Linux'))">linux-x64</StirlingLabsSockaddrNetSelectRuntimeId>
+    </PropertyGroup>
+
+    <ItemGroup Condition="!$(StirlingLabsSockaddrNetSelectAllRuntimes) AND !$(StirlingLabsSockaddrNetSelectRuntimeId.StartsWith('linux'))">
+        <PackageReference Remove="StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa"/>
+    </ItemGroup>
+    <ItemGroup Condition="$(StirlingLabsSockaddrNetSelectAllRuntimes) OR $(StirlingLabsSockaddrNetSelectRuntimeId.StartsWith('linux'))">
+        <PackageReference Include="StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa" Version="$(StirlingLabsSockaddrNetVersion)"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="!$(StirlingLabsSockaddrNetSelectAllRuntimes) AND !$(StirlingLabsSockaddrNetSelectRuntimeId.StartsWith('osx'))">
+        <ProjectReference Remove="StirlingLabs.sockaddr.Net.runtime.osx.libsa"/>
+    </ItemGroup>
+    <ItemGroup Condition="$(StirlingLabsSockaddrNetSelectAllRuntimes) OR $(StirlingLabsSockaddrNetSelectRuntimeId.StartsWith('osx'))">
+        <PackageReference Include="StirlingLabs.sockaddr.Net.runtime.osx.libsa" Version="$(StirlingLabsSockaddrNetVersion)"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="!$(StirlingLabsSockaddrNetSelectAllRuntimes) AND !$(StirlingLabsSockaddrNetSelectRuntimeId.StartsWith('win'))">
+        <PackageReference Remove="StirlingLabs.sockaddr.Net.runtime.win-x64.libsa"/>
+    </ItemGroup>
+    <ItemGroup Condition="$(StirlingLabsSockaddrNetSelectAllRuntimes) OR $(StirlingLabsSockaddrNetSelectRuntimeId.StartsWith('win'))">
+        <PackageReference Include="StirlingLabs.sockaddr.Net.runtime.win-x64.libsa" Version="$(StirlingLabsSockaddrNetVersion)"/>
+    </ItemGroup>
 </Project>

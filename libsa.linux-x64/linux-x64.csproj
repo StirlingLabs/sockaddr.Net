@@ -43,7 +43,8 @@
         <None Include="libsa.so">
             <Pack>True</Pack>
             <PackageCopyToOutput>True</PackageCopyToOutput>
-            <PackagePath>runtimes/linux-x64/native/</PackagePath>
+            <PackagePath>runtimes/linux-x64/native/libsa.so</PackagePath>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Link>%(Identity)</Link>
         </None>
     </ItemGroup>

@@ -43,11 +43,9 @@
         <None Include="sa.dll">
             <Pack>True</Pack>
             <PackageCopyToOutput>True</PackageCopyToOutput>
-            <PackagePath>runtimes/win-x64/native/</PackagePath>
-            <Link>%(Identity)</Link>
-        </None>
-        <None Update="sa.dll" Condition="$(RuntimeIdentifier.StartsWith('win'))">
+            <PackagePath>runtimes/win-x64/native/sa.dll</PackagePath>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Link>%(Identity)</Link>
         </None>
     </ItemGroup>
 

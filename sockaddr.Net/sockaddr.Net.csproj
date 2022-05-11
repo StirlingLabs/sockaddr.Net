@@ -12,14 +12,14 @@
     <PropertyGroup>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <Description>
-            Cross-platform socket addresses.  Simply cast from native to StirlingLabs.sockaddr*
+            Cross-platform socket addresses. Simply cast from native to StirlingLabs.sockaddr*
             for validation or manipulation without regard to the native format, then cast
             back to use in a native API.
         </Description>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\" />
+        <None Include="README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
     <PropertyGroup Condition="'$(CI)'!=''">
@@ -32,25 +32,37 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="InlineIL.Fody" Version="1.7.1" PrivateAssets="all" />
-        <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" PrivateAssets="all" />
-        <PackageReference Include="StirlingLabs.Utilities" Version="22.5.2" />
-        <PackageReference Include="StirlingLabs.Utilities.Magic" Version="22.5.2" />
-        <PackageReference Include="StirlingLabs.BigSpans" Version="22.5.0" />
+        <PackageReference Include="InlineIL.Fody" Version="1.7.1" PrivateAssets="all"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" PrivateAssets="all"/>
+        <PackageReference Include="StirlingLabs.Utilities" Version="22.5.2"/>
+        <PackageReference Include="StirlingLabs.Utilities.Magic" Version="22.5.2"/>
+        <PackageReference Include="StirlingLabs.BigSpans" Version="22.5.0"/>
     </ItemGroup>
 
     <ImportGroup>
-        <Import Project="../Version.proj" />
+        <Import Project="../Version.proj"/>
     </ImportGroup>
 
     <ItemGroup>
         <None Include="StirlingLabs.sockaddr.Net.props">
             <Pack>true</Pack>
-            <PackagePath>build</PackagePath>
+            <PackagePath>build;buildCrossTargeting</PackagePath>
         </None>
         <None Include="StirlingLabs.sockaddr.Net.targets">
             <Pack>true</Pack>
-            <PackagePath>build</PackagePath>
+            <PackagePath>build;buildCrossTargeting</PackagePath>
         </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\libsa.linux-x64\linux-x64.csproj">
+            <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
+        </ProjectReference>
+        <ProjectReference Include="..\libsa.osx\osx.csproj" Condition="'$(TargetFramework)'!='net5.0'">
+            <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
+        </ProjectReference>
+        <ProjectReference Include="..\libsa.win-x64\win-x64.csproj">
+            <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
+        </ProjectReference>
     </ItemGroup>
 </Project>

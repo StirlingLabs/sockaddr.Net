@@ -70,11 +70,4 @@
         <ReportGenerator ReportFiles="@(CoverletReport)" ReportTypes="MarkdownSummary;Badges" SourceDirectories="../sockaddr.Net" TargetDirectory="../coverage/"/>
     </Target>
 
-    <Target Name="ListPackageReferencesBeforeCoreCompile" BeforeTargets="Build">
-        <Message Importance="high" Text="PackageReferences: @(PackageReference)"/>
-    </Target>
-    <Target Name="ListReferencesBeforeCoreCompile" BeforeTargets="Build">
-        <Message Importance="high" Text="References: @(Reference)"/>
-    </Target>
-
 </Project>
