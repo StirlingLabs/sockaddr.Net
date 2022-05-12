@@ -2,6 +2,7 @@
 <Project>
     <PropertyGroup>
         <StirlingLabsSockaddrNetVersion>@(PackageReference->WithMetadataValue('Identity','StirlingLabs.sockaddr.Net')->Metadata('Version'))</StirlingLabsSockaddrNetVersion>
+        <StirlingLabsSockaddrNetVersion Condition="'$(StirlingLabsSockaddrNetVersion)'==''">*</StirlingLabsSockaddrNetVersion>
         <StirlingLabsSockaddrNetSelectRuntimeId Condition="'$(StirlingLabsSockaddrNetSelectRuntimeId)'==''">$(RuntimeIdentifier)</StirlingLabsSockaddrNetSelectRuntimeId>
         <StirlingLabsSockaddrNetSelectRuntimeId Condition="'$(StirlingLabsSockaddrNetSelectRuntimeId)'==''">$(DefaultAppHostRuntimeIdentifier)</StirlingLabsSockaddrNetSelectRuntimeId>
         <StirlingLabsSockaddrNetSelectRuntimeId Condition="'$(StirlingLabsSockaddrNetSelectRuntimeId)'==''">$(NETCoreSdkPortableRuntimeIdentifier)</StirlingLabsSockaddrNetSelectRuntimeId>
