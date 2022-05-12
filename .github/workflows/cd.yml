@@ -14,12 +14,14 @@ jobs:
     name: Linux
     runs-on: ubuntu-20.04
     steps:
+      - name: Get the version
+        id: gv
+        run: echo ::set-output name=v::${GITHUB_REF/refs\/tags\/v/}
       - name: Parse Version
+        uses: apexskier/github-semver-parse@v1
         id: v
-        uses: booxmedialtd/ws-action-parse-semver@v1
         with:
-          input_string: ${{ github.ref }}
-          version_extractor_regex: ^refs\/tags\/v(.*)$
+          version: ${{ steps.gv.outputs.v }}
       - uses: actions/checkout@v2
         with:
           submodules: true
@@ -147,12 +149,14 @@ jobs:
     runs-on: ubuntu-20.04
     needs: [ linux, macos, windows ]
     steps:
+      - name: Get the version
+        id: gv
+        run: echo ::set-output name=v::${GITHUB_REF/refs\/tags\/v/}
       - name: Parse Version
+        uses: apexskier/github-semver-parse@v1
         id: v
-        uses: booxmedialtd/ws-action-parse-semver@v1
         with:
-          input_string: ${{ github.ref }}
-          version_extractor_regex: ^refs\/tags\/v(.*)$
+          version: ${{ steps.gv.outputs.v }}
       - uses: actions/download-artifact@v2
         with:
           path: artifacts
