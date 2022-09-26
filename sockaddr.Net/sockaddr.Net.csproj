@@ -55,13 +55,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\libsa.linux-x64\linux-x64.csproj">
+        <ProjectReference Include="..\libsa.linux-x64\linux-x64.csproj" PackageVersion="[$(Version)]">
             <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
         </ProjectReference>
-        <ProjectReference Include="..\libsa.osx\osx.csproj" Condition="'$(TargetFramework)'!='net5.0'">
+        <ProjectReference Include="..\libsa.osx\osx.csproj" Condition="'$(TargetFramework)'!='net5.0'" PackageVersion="[$(Version)]">
             <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
         </ProjectReference>
-        <ProjectReference Include="..\libsa.win-x64\win-x64.csproj">
+        <ProjectReference Include="..\libsa.win-x64\win-x64.csproj" PackageVersion="[$(Version)]">
             <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
         </ProjectReference>
     </ItemGroup>
