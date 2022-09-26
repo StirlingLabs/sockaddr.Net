@@ -37,7 +37,15 @@ jobs:
         run: |
           git describe --exact-match --match='v*' --abbrev=0 --tags ${{ github.sha }} 2>/dev/null \
           || echo "::set-output name=is_not_release::true"
-  
+
+  metadata:
+    name: Collect metadata
+    uses: StirlingLabs/.github/.github/workflows/metadata.yaml@main
+    with:
+      gitRepo: ${ GITHUB_REPOSITORY }
+      refType: ${{ github.ref_type }}
+      refName: ${{ github.ref_name }}
+      
   linux:
     name: Linux
     needs: skip_check
