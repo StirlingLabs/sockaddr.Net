@@ -16,11 +16,11 @@
     </PropertyGroup>
 
     <ItemGroup Condition="'$(UseBuiltNuPkg)'!=''">
-        <PackageReference Include="StirlingLabs.sockaddr.Net" Version="*-*"/>
+        <PackageReference Include="StirlingLabs.sockaddr.Net" Version="*-*" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(UseBuiltNuPkg)'==''">
-        <ProjectReference Include="..\sockaddr.Net\sockaddr.Net.csproj"/>
+        <ProjectReference Include="..\sockaddr.Net\sockaddr.Net.csproj" />
     </ItemGroup>
 
     <Choose>
@@ -31,13 +31,7 @@
                 </ProjectReference>
             </ItemGroup>
         </When>
-        <When Condition="$(RuntimeIdentifier.StartsWith('osx'))">
-            <ItemGroup Condition="'$(UseBuiltNuPkg)'==''">
-                <ProjectReference Include="../libsa.osx/osx.csproj">
-                    <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
-                </ProjectReference>
-            </ItemGroup>
-        </When>
+        <When Condition="$(RuntimeIdentifier.StartsWith('osx'))" />
         <When Condition="$(RuntimeIdentifier.StartsWith('win'))">
             <ItemGroup Condition="'$(UseBuiltNuPkg)'==''">
                 <ProjectReference Include="../libsa.win-x64/win-x64.csproj">
@@ -48,25 +42,25 @@
     </Choose>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0"/>
-        <PackageReference Include="NUnit" Version="3.13.3"/>
-        <PackageReference Include="NUnit3TestAdapter" Version="4.2.1"/>
-        <PackageReference Include="StirlingLabs.BigSpans" Version="22.5.0"/>
-        <PackageReference Include="StirlingLabs.BigSpans.NUnit" Version="22.5.0"/>
-        <PackageReference Include="coverlet.collector" Version="3.1.2" PrivateAssets="all"/>
-        <PackageReference Include="GitHubActionsTestLogger" Version="1.4.1" PrivateAssets="all"/>
-        <PackageReference Include="coverlet.msbuild" Version="3.1.2" PrivateAssets="all"/>
-        <PackageReference Include="ReportGenerator" Version="5.1.6" PrivateAssets="all"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
+        <PackageReference Include="NUnit" Version="3.13.3" />
+        <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+        <PackageReference Include="StirlingLabs.BigSpans" Version="22.9.4" />
+        <PackageReference Include="StirlingLabs.BigSpans.NUnit" Version="22.9.4" />
+        <PackageReference Include="coverlet.collector" Version="3.1.2" PrivateAssets="all" />
+        <PackageReference Include="GitHubActionsTestLogger" Version="2.0.1" PrivateAssets="all" />
+        <PackageReference Include="coverlet.msbuild" Version="3.1.2" PrivateAssets="all" />
+        <PackageReference Include="ReportGenerator" Version="5.1.10" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard'))">
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
-        <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     </ItemGroup>
 
     <Target Name="GenerateHtmlCoverageReport" AfterTargets="GenerateCoverageResultAfterTest">
         <!-- generate markdown coverage report and badges -->
-        <ReportGenerator ReportFiles="@(CoverletReport)" ReportTypes="MarkdownSummary;Badges" SourceDirectories="../sockaddr.Net" TargetDirectory="../coverage/"/>
+        <ReportGenerator ReportFiles="@(CoverletReport)" ReportTypes="MarkdownSummary;Badges" SourceDirectories="../sockaddr.Net" TargetDirectory="../coverage/" />
     </Target>
 
 </Project>

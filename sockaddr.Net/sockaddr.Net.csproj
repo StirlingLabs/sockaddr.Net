@@ -9,34 +9,44 @@
         <RootNamespace>StirlingLabs.sockaddr.Net</RootNamespace>
     </PropertyGroup>
 
-    <PropertyGroup>
-        <Description>
-            Cross-platform socket addresses. Simply cast from native to StirlingLabs.sockaddr*
-            for validation or manipulation without regard to the native format, then cast
-            back to use in a native API.
-        </Description>
-    </PropertyGroup>
-
     <PropertyGroup Condition="'$(CI)'!=''">
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageOutputPath>../artifacts</PackageOutputPath>
     </PropertyGroup>
 
+    <ImportGroup>
+        <Import Project="../Version.proj" />
+    </ImportGroup>
+
+    <Target Name="FixRuntimePackageVersions" DependsOnTargets="" BeforeTargets="CollectPackageReferences" AfterTargets="">
+        <Message Importance="high" Text="Helo? version:$(Version) pv:$(PackageVersion) id $(Id) type $(Type)" />
+        <Message Importance="high" Text="&gt;&gt;----- $(AssemblyName) ----- $prs $(PackageReferences) ItemName $(ItemName) TargetId $(TargetId) _HasPackageReferenceItems $(_HasPackageReferenceItems) PrivateAssets $(PrivateAssets) _RestoreProjectName $(_RestoreProjectName) _RestoreProjectVersion $(_RestoreProjectVersion) _RestoreCrossTargeting $(_RestoreCrossTargeting) Targets $(Targets) PackageReferences @(PackageReferences) _RestoreGraphEntry @(_RestoreGraphEntry)" />
+        <Message Importance="high" Text="&gt;&gt;----- _RestoreProjectPathItems  @(_RestoreProjectPathItems) _GenerateRestoreGraphProjectEntryInputProperties $(_GenerateRestoreGraphProjectEntryInputProperties) _RestoreProjectPathItemsOutputs @(_RestoreProjectPathItemsOutputs) _RestoreProjectPathItemsWithoutDupes @(_RestoreProjectPathItemsWithoutDupes) _RestoreProjectPathItems @(_RestoreProjectPathItems)" />
+        <Message Importance="high" Text="&gt;&gt;----- pv @(PackageVersion) pr @(PackageReference)" />
+        <Message Importance="high" Text="&gt;&gt;----- " />
+        <Message Importance="high" Text="-----&lt;&lt;" />
+        <ItemGroup>
+            <PackageReference Update="StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa" Version="$(PackageVersion)" />
+            <PackageReference Update="StirlingLabs.sockaddr.Net.runtime.osx.libsa" Version="$(PackageVersion)" />
+            <PackageReference Update="StirlingLabs.sockaddr.Net.runtime.win-x64.libsa" Version="$(PackageVersion)" />
+        </ItemGroup>
+        <PropertyGroup><Version>99.0.0</Version></PropertyGroup>
+    </Target>
+
     <ItemGroup>
-        <PackageReference Include="Fody" Version="6.6.1">
+        <PackageReference Include="Fody" Version="6.6.3">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="InlineIL.Fody" Version="1.7.1" PrivateAssets="all"/>
-        <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" PrivateAssets="all"/>
-        <PackageReference Include="StirlingLabs.Utilities" Version="22.5.2"/>
-        <PackageReference Include="StirlingLabs.Utilities.Magic" Version="22.5.2"/>
-        <PackageReference Include="StirlingLabs.BigSpans" Version="22.5.0"/>
+        <PackageReference Include="InlineIL.Fody" Version="1.7.2" PrivateAssets="all" />
+        <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" PrivateAssets="all" />
+        <PackageReference Include="StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa" Version="$(Version)" />
+        <PackageReference Include="StirlingLabs.sockaddr.Net.runtime.osx.libsa" Version="$(Version)" />
+        <PackageReference Include="StirlingLabs.sockaddr.Net.runtime.win-x64.libsa" Version="$(Version)" />
+        <PackageReference Include="StirlingLabs.Utilities" Version="22.9.1" />
+        <PackageReference Include="StirlingLabs.Utilities.Magic" Version="22.9.1" />
+        <PackageReference Include="StirlingLabs.BigSpans" Version="22.9.4" />
     </ItemGroup>
-
-    <ImportGroup>
-        <Import Project="../Version.proj"/>
-    </ImportGroup>
 
     <ItemGroup>
         <None Include="StirlingLabs.sockaddr.Net.props">
@@ -47,17 +57,5 @@
             <Pack>true</Pack>
             <PackagePath>build;buildCrossTargeting</PackagePath>
         </None>
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\libsa.linux-x64\linux-x64.csproj" PackageVersion="[$(Version)]">
-            <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
-        </ProjectReference>
-        <ProjectReference Include="..\libsa.osx\osx.csproj" Condition="'$(TargetFramework)'!='net5.0'" PackageVersion="[$(Version)]">
-            <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
-        </ProjectReference>
-        <ProjectReference Include="..\libsa.win-x64\win-x64.csproj" PackageVersion="[$(Version)]">
-            <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
-        </ProjectReference>
     </ItemGroup>
 </Project>
