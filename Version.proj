@@ -7,7 +7,9 @@
         <RepositoryUrl>https://github.com/StirlingLabs/sockaddr.Net.git</RepositoryUrl>
         <PackageProjectUrl>https://github.com/StirlingLabs/sockaddr.Net</PackageProjectUrl>
         <description>
-          Provides cross-platform socket address bindings for .Net
+            Cross-platform socket addresses. Simply cast from native to StirlingLabs.sockaddr*
+            for validation or manipulation without regard to the native format, then cast
+            back to use in a native API.
         </description>
         <GitDefaultBranch>main</GitDefaultBranch>
         <GitCommitsIgnoreMerges>true</GitCommitsIgnoreMerges>
