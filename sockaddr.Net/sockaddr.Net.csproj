@@ -18,19 +18,16 @@
         <Import Project="../Version.proj" />
     </ImportGroup>
 
-    <Target Name="FixRuntimePackageVersions" DependsOnTargets="" BeforeTargets="CollectPackageReferences" AfterTargets="">
-        <Message Importance="high" Text="Helo? version:$(Version) pv:$(PackageVersion) id $(Id) type $(Type)" />
-        <Message Importance="high" Text="&gt;&gt;----- $(AssemblyName) ----- $prs $(PackageReferences) ItemName $(ItemName) TargetId $(TargetId) _HasPackageReferenceItems $(_HasPackageReferenceItems) PrivateAssets $(PrivateAssets) _RestoreProjectName $(_RestoreProjectName) _RestoreProjectVersion $(_RestoreProjectVersion) _RestoreCrossTargeting $(_RestoreCrossTargeting) Targets $(Targets) PackageReferences @(PackageReferences) _RestoreGraphEntry @(_RestoreGraphEntry)" />
-        <Message Importance="high" Text="&gt;&gt;----- _RestoreProjectPathItems  @(_RestoreProjectPathItems) _GenerateRestoreGraphProjectEntryInputProperties $(_GenerateRestoreGraphProjectEntryInputProperties) _RestoreProjectPathItemsOutputs @(_RestoreProjectPathItemsOutputs) _RestoreProjectPathItemsWithoutDupes @(_RestoreProjectPathItemsWithoutDupes) _RestoreProjectPathItems @(_RestoreProjectPathItems)" />
-        <Message Importance="high" Text="&gt;&gt;----- pv @(PackageVersion) pr @(PackageReference)" />
-        <Message Importance="high" Text="&gt;&gt;----- " />
-        <Message Importance="high" Text="-----&lt;&lt;" />
+    <Target Name="ApplyGitInfoBeforeRestore" DependsOnTargets="ApplyGitInfo" AfterTargets="ApplyGitInfo">
+        <Message Importance="high" Text="ApplyGitInfoBeforeRestore" />
+    </Target>
+
+    <Target Name="FixRuntimePackageVersions" DependsOnTargets="ApplyGitInfoBeforeRestore" BeforeTargets="CollectPackageReferences" AfterTargets="ApplyGitInfoBeforeRestore">
         <ItemGroup>
-            <PackageReference Update="StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa" Version="$(PackageVersion)" />
-            <PackageReference Update="StirlingLabs.sockaddr.Net.runtime.osx.libsa" Version="$(PackageVersion)" />
-            <PackageReference Update="StirlingLabs.sockaddr.Net.runtime.win-x64.libsa" Version="$(PackageVersion)" />
+            <PackageReference
+                Update="@(PackageReference)" Version="[*,$(_PackageVersion)]"
+                Condition="$([MSBuild]::ValueOrDefault('%(PackageReference.Identity)','').StartsWith('StirlingLabs.sockaddr.Net.runtime.'))" />
         </ItemGroup>
-        <PropertyGroup><Version>99.0.0</Version></PropertyGroup>
     </Target>
 
     <ItemGroup>
@@ -40,9 +37,9 @@
         </PackageReference>
         <PackageReference Include="InlineIL.Fody" Version="1.7.2" PrivateAssets="all" />
         <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" PrivateAssets="all" />
-        <PackageReference Include="StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa" Version="$(Version)" />
-        <PackageReference Include="StirlingLabs.sockaddr.Net.runtime.osx.libsa" Version="$(Version)" />
-        <PackageReference Include="StirlingLabs.sockaddr.Net.runtime.win-x64.libsa" Version="$(Version)" />
+        <PackageReference Include="StirlingLabs.sockaddr.Net.runtime.linux-x64.libsa" Version="*" />
+        <PackageReference Include="StirlingLabs.sockaddr.Net.runtime.osx.libsa" Version="*" />
+        <PackageReference Include="StirlingLabs.sockaddr.Net.runtime.win-x64.libsa" Version="*" />
         <PackageReference Include="StirlingLabs.Utilities" Version="22.9.1" />
         <PackageReference Include="StirlingLabs.Utilities.Magic" Version="22.9.1" />
         <PackageReference Include="StirlingLabs.BigSpans" Version="22.9.4" />
