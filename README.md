@@ -1,4 +1,4 @@
-![StirlingLabs.sockaddr.Net](sockaddr-dotnet.jpg)
+![StirlingLabs.sockaddr.Net](https://raw.githubusercontent.com/StirlingLabs/sockaddr.Net/main/sockaddr-dotnet.jpg)
 
 > [libsa](https://github.com/StirlingLabs/libsa) provides cross-platform socket address bindings in C11, designed to be very portable and easy to use.  This allows higher-level network code to use a single format but still communicate effectively with low-level native platform code.
 
