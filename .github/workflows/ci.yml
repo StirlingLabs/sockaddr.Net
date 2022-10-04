@@ -40,11 +40,7 @@ jobs:
 
   metadata:
     name: Collect metadata
-    uses: StirlingLabs/.github/.github/workflows/metadata.yaml@main
-    with:
-      gitRepo: ${ GITHUB_REPOSITORY }
-      refType: ${{ github.ref_type }}
-      refName: ${{ github.ref_name }}
+    uses: StirlingLabs/Actions/.github/workflows/metadata.yaml@main
       
   linux:
     name: Linux
