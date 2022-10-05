@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<coverage line-rate="0.4122" branch-rate="0.2878" version="1.9" timestamp="1664873239" lines-covered="108" lines-valid="262" branches-covered="38" branches-valid="132">
+<coverage line-rate="0.4122" branch-rate="0.2878" version="1.9" timestamp="1664961380" lines-covered="108" lines-valid="262" branches-covered="38" branches-valid="132">
   <sources />
   <packages>
     <package name="StirlingLabs.sockaddr.Net" line-rate="0.4122" branch-rate="0.2878" complexity="205">
